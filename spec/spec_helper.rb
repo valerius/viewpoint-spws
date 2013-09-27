@@ -3,7 +3,7 @@ require 'yaml'
 require 'date'
 require 'viewpoint/spws'
 
-# To run these tests put configuration into a file called site_info.yaml
+# To run these test put configuration into a file called site_info.yaml
 # --- 
 # :site: sp_site_base
 # :user: user
