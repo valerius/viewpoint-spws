@@ -195,7 +195,14 @@ class Viewpoint::SPWS::Types::ListItem
   # Parse the fields out of the passed XML document.
   # @param[Nokogiri::XML::Element] xml
   def parse_xml_fields(xml)
-    @xmldoc = xml
+
+    if xml.is_a?(REXML::Element) # if defined?(JRUBY_VERSION)
+      @xmldoc = xml.attributes
+    else
+      @xmldoc = xml
+    end
+
+
     set_field   :@id, 'ows_ID'
     set_field   :@file_name, 'ows_LinkFilename'
     set_field   :@meta_info, 'ows_MetaInfo'

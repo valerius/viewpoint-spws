@@ -19,7 +19,7 @@ class RexmlTest < Test::Unit::TestCase
   def test_rexml
     xml = File.open(File.dirname(__FILE__) + '/test.xml').read
     soaprsp = REXML::Document.new(xml)
-
+    #soaprsp = REXML::Document.new(File.open("test.xml").read)
     ns = {'z' => "#RowsetSchema"}
     items = []
     REXML::XPath.each(soaprsp.root,'//z:row',ns) {|e| items << e }

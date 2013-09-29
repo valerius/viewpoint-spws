@@ -7,7 +7,13 @@ describe 'Test the Sharepoint List web service functionality' do
   end
 
   it 'should return the Lists web service' do
-    @scli.lists_ws.should be_an_instance_of Viewpoint::SPWS::Websvc::Lists
+    (items_list=@scli.lists_ws).should be_an_instance_of Viewpoint::SPWS::Websvc::Lists
+    items_list
+  end
+
+  it 'should return site pages' do
+    list_items = @scli.get_list("Site Pages").items
+    list_items.should be_instance_of Array
   end
 
   it 'should return the Copy web service' do
