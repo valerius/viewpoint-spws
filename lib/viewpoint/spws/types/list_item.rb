@@ -33,6 +33,7 @@ class Viewpoint::SPWS::Types::ListItem
     @list_id = list_id
     @pending_updates  = [] # a place to store updates before #save! is called
     @update_keys      = {} # the variables to update after #save!
+    @meta_attributes = {}
     parse_xml_fields(xml)
   end
 
@@ -222,8 +223,26 @@ class Viewpoint::SPWS::Types::ListItem
     set_field   :@modified_date, 'ows_Modified'
     set_field   :@created_date, 'ows_Created_x0020_Date' unless @created_date
     set_field   :@modified_date, 'ows_Last_x0020_Modified' unless @modified_date
+    parse_meta_info(@meta_info)
     @xmldoc = nil
   end
+
+
+  def parse_meta_info(meta_info)
+    tokens = meta_info.split("\r\n")
+    tokens.each do |t|
+      (key,value) = t.split("|",2)
+      (name,type) = key.split(":",2)
+      puts "name=#{name} type=(#{type}) value=(#{value})"
+      @meta_attributes[name] = value
+    end
+  end
+
+  def meta_attributes
+    @meta_attributes
+  end
+
+
 
   # Parse a Sharepoint field or managed field
   # @param [Symbol] vname The instance variable we will set the value to if it exists
