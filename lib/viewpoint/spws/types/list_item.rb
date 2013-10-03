@@ -173,6 +173,10 @@ class Viewpoint::SPWS::Types::ListItem
     save!
   end
 
+  def meta_attributes
+    @meta_attributes
+  end
+
   private
 
   # Return the full FileRef with the site URL attatched
@@ -238,9 +242,6 @@ class Viewpoint::SPWS::Types::ListItem
     end
   end
 
-  def meta_attributes
-    @meta_attributes
-  end
 
 
 
