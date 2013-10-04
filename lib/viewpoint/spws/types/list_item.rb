@@ -24,6 +24,7 @@ class Viewpoint::SPWS::Types::ListItem
   attr_reader :id, :body, :file_name, :file_ref, :editor, :guid, :object_type
   attr_reader :created_date, :modified_date, :due_date
   attr_reader :title, :link_title, :status, :priority, :percent_complete
+  attr_reader :meta_attributes
 
   # @param [Viewpoint::SPWS::Websvc::List] ws The webservice instance this ListItem spawned from
   # @param [String] list_id The list id that this item belongs to
@@ -173,9 +174,6 @@ class Viewpoint::SPWS::Types::ListItem
     save!
   end
 
-  def meta_attributes
-    @meta_attributes
-  end
 
   private
 
@@ -227,7 +225,7 @@ class Viewpoint::SPWS::Types::ListItem
     set_field   :@modified_date, 'ows_Modified'
     set_field   :@created_date, 'ows_Created_x0020_Date' unless @created_date
     set_field   :@modified_date, 'ows_Last_x0020_Modified' unless @modified_date
-    parse_meta_info(@meta_info)
+    parse_meta_info(@meta_info) unless @meta_info.nil?
     @xmldoc = nil
   end
 
@@ -237,7 +235,13 @@ class Viewpoint::SPWS::Types::ListItem
     tokens.each do |t|
       (key,value) = t.split("|",2)
       (name,type) = key.split(":",2)
-      puts "name=#{name} type=(#{type}) value=(#{value})"
+      converter = {
+          "BR"=> lambda {|x| ["true",1].include?(x)},   #boolean
+          "SR"=> lambda {|x| x.to_s},
+          "VR"=> lambda {|x| x.to_s},
+          "SW"=> lambda {|x| x.to_s}
+      }[type]
+      value = converter.call(value) unless converter.nil?
       @meta_attributes[name] = value
     end
   end
