@@ -240,24 +240,12 @@ class Viewpoint::SPWS::Websvc::Lists
 
     items = []
 
-    if defined?(JRUBY_VERSION)
-      soap_xml = send_soap_request(soapmsg.doc.to_xml)
-      soaprsp = REXML::Document.new(soap_xml)
-      ns = {'z' => "#RowsetSchema"}
-      REXML::XPath.each(soaprsp.root,'//z:row',ns)  do |li|
-        items << Types::ListItem.new(self, list, li)
-      end
-
-    else
-      soap_xml = send_soap_request(soapmsg.doc.to_xml)
-      soaprsp = Nokogiri::XML(soap_xml)
-      ns = {'xmlns:z' => "#RowsetSchema"}
-      soaprsp.xpath('//z:row', ns).each do |li|
-        items << Types::ListItem.new(self, list, li)
-      end
+    soap_xml = send_soap_request(soapmsg.doc.to_xml)
+    soaprsp = Nokogiri::XML(soap_xml)
+    ns = {'xmlns:z' => "#RowsetSchema"}
+    soaprsp.xpath("//*[name()='z:row']", ns).each do |li|
+      items << Types::ListItem.new(self, list, li)
     end
-
-
 
     items
   end
