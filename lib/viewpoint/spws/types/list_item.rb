@@ -225,7 +225,7 @@ class Viewpoint::SPWS::Types::ListItem
     set_field   :@modified_date, 'ows_Modified'
     set_field   :@created_date, 'ows_Created_x0020_Date' unless @created_date
     set_field   :@modified_date, 'ows_Last_x0020_Modified' unless @modified_date
-    parse_meta_info(@meta_info) unless @meta_info.nil?
+    parse_meta_info(@meta_info) if @meta_info.is_a?(String)
     @xmldoc = nil
   end
 
